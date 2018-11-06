@@ -1,4 +1,9 @@
+
 import org.apache.log4j.Logger;
+
+import java.math.BigDecimal;
+import java.util.*;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * @Author: 孟庆浩
@@ -13,11 +18,30 @@ public class Test {
 
 
     public static void main(String[] args) {
-        //nodeTest();
-        Double d = 0.8d;
-        Double d2 = 0.1d;
-        System.out.println(d+d2);
+
+        final List<Map<String,Object>> datas = new ArrayList<Map<String,Object>>();
+
+        BigDecimal one = BigDecimal.ONE;
+
+        BigDecimal ten = BigDecimal.TEN;
+        one.divide(ten);
+
+
+
+        CompletableFuture.runAsync(() ->{
+            System.out.println("task doing...");
+            try {
+                Thread.sleep(3000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        });
+
+        System.out.println("---------------------------"+one);
     }
+
+
+
 
     /**
      * 单链表翻转

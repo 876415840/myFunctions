@@ -27,25 +27,12 @@ public class UserController {
     private Logger logger = Logger.getLogger(UserController.class);
 
     @Autowired
-    private UserMapper userMapper;
+    //private UserMapper userMapper;
 
     @RequestMapping("/add")
-    public String add(@RequestBody User user){
-        int result = 0;
-        String name = user.getName();
-        int age = user.getAge();
-        for(int i=0; i < 100000; i++){
-            result += userMapper.insert(user);
-            user.setName(name + i);
-            user.setAge(age+i);
-        }
-        logger.info("我是info");
-        logger.trace("我是trace");
-        logger.debug("我是debug");
-        logger.warn("我是warn");
-        logger.error("我是error");
-        crashTest();
-        return "影响行数"+result;
+    public String add(){
+
+        return "影响行数";
     }
 
 
@@ -88,20 +75,21 @@ public class UserController {
          * @return
          */
         public String getNameByCache(String userId) {
-            //1.从缓存里取数据
-            User user = cacheService.cacheResult(userId, "user");
-            //2.如果缓存中有，则取出
-            if(user != null){
-                logger.info("==============================get data from cache=============================");
-                return user.getName();
-            }
-            //3.如果缓存中没有，则从数据库中取
-            user = userMapper.findUserById(Integer.parseInt(userId));
-            logger.info("==============================get data from mysql=============================");
-            //4.将数据库中取出的数据，放到缓存
-            if(user != null)
-                cacheService.cachePut(userId,user,"user");
-            return user.getName();
+//            //1.从缓存里取数据
+//            User user = cacheService.cacheResult(userId, "user");
+//            //2.如果缓存中有，则取出
+//            if(user != null){
+//                logger.info("==============================get data from cache=============================");
+//                return user.getName();
+//            }
+//            //3.如果缓存中没有，则从数据库中取
+//            user = userMapper.findUserById(Integer.parseInt(userId));
+//            logger.info("==============================get data from mysql=============================");
+//            //4.将数据库中取出的数据，放到缓存
+//            if(user != null)
+//                cacheService.cachePut(userId,user,"user");
+//            return user.getName();
+            return "";
         }
     }
 }
