@@ -20,7 +20,7 @@ class RedisCacheServiceImpl : CacheService {
     @Resource
     private val cacheManager: CacheManager? = null
 
-    override fun <V> cacheResult(key: String, cacheName: String): V? {
+    override fun <V> cacheResult(key: String, cacheName: String): V {
         val valueWrapper = cacheManager!!.getCache(cacheName).get(key)
         return valueWrapper?.get() as V
     }

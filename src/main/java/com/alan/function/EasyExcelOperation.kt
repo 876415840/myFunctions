@@ -11,6 +11,7 @@ import javax.servlet.ServletOutputStream
 import javax.servlet.http.HttpServletResponse
 import java.io.IOException
 import java.net.URLEncoder
+import java.nio.charset.Charset
 import java.text.SimpleDateFormat
 import java.util.Date
 
@@ -51,7 +52,7 @@ object EasyExcelOperation {
         try {
 
 
-            val fileName = String(SimpleDateFormat("yyyy-MM-dd").format(Date()).toByteArray(), "UTF-8")
+            val fileName = String(SimpleDateFormat("yyyy-MM-dd").format(Date()).toByteArray(), Charset.forName("UTF-8"))
 
             val sheet2 = Sheet(2, 3, clazz, "sheet", null)
 

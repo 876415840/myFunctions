@@ -52,7 +52,7 @@ class UserController {
 
     internal inner class UserThread(map: Map<String, Int>) : Runnable {
 
-        var num = 1
+        var num: Int? = 1
 
         init {
             this.num = map["num"]
