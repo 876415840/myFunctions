@@ -15,7 +15,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication
 open class MyFunctionApplication {
 
     companion object {
-        val LOGGER: Logger = LoggerFactory.getLogger(MyFunctionApplication::class.java)
+        private val LOGGER: Logger = LoggerFactory.getLogger(MyFunctionApplication::class.java)
         @JvmStatic
         fun main(args: Array<String>) {
             SpringApplication.run(MyFunctionApplication::class.java, *args)

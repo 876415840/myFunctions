@@ -29,5 +29,4 @@ class SpidersController {
         var str: String = realtySpidersService!!.spidersInfo()
         return "爬虫$str"
     }
-
 }
