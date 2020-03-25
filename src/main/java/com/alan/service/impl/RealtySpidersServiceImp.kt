@@ -1,8 +1,8 @@
-package java.com.alan.service.impl
+package com.alan.service.impl
 
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
-import java.com.alan.service.SpidersService
+import com.alan.service.SpidersService
 
 /**
  * @Description 房地产爬虫实现

@@ -1,5 +1,3 @@
-import java.nio.charset.Charset
-
 fun main(args: Array<String>) {
     val c: Int = sum(1,2)
     println("sum==>"+c.toString())

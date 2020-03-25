@@ -4,7 +4,6 @@ import com.alibaba.excel.ExcelWriter
 import com.alibaba.excel.metadata.BaseRowModel
 import com.alibaba.excel.metadata.Sheet
 import com.alibaba.excel.support.ExcelTypeEnum
-import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 import javax.servlet.ServletOutputStream

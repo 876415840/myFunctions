@@ -1,4 +1,4 @@
-package java.com.alan.service
+package com.alan.service
 
 /**
  * @Description 爬虫接口
