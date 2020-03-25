@@ -34,10 +34,6 @@ public class MyLRU<K, V> implements Serializable {
      * 尾对象
      */
     private transient volatile Node<K,V> tail;
-    /**
-     * 下个对象
-     */
-    private transient volatile Node<K,V> next;
 
     public MyLRU(int initialCapacity) {
         this.initialCapacity = initialCapacity;
@@ -66,7 +62,6 @@ public class MyLRU<K, V> implements Serializable {
             Node<K,V> c = new Node<K,V>(key, value, null);
             this.head = c;
             this.tail = c;
-            this.next = c;
             map.put(key, c);
             size++;
             return;
@@ -86,24 +81,33 @@ public class MyLRU<K, V> implements Serializable {
 
         Node<K,V> c = new Node<K,V>(key, value, this.head);
         this.head = c;
-        this.next = c;
         map.put(key, c);
         size++;
     }
 
-    public V next() {
-        Node<K,V> node = this.next;
+    public V get(K key) {
+        Node<K,V> node = map.get(key);
         if (node == null) {
             return null;
         }
-        this.next = node.next;
+        Node<K,V> next = node.next;
+        Node<K,V> pre = node.pre;
+        if (pre == null) {
+            return node.v;
+        }
+        if (next == null) {
+            pre.next = null;
+            this.tail = pre;
+        } else {
+            next.pre = pre;
+            pre.next = next;
+        }
+        node.next = this.head;
+        this.head.pre = node;
+        this.head = node;
         return node.v;
     }
 
-    public boolean hasNext() {
-        return this.next != null;
-    }
-    
     private void delete (Node<K,V> node) {
         this.map.remove(node.k);
         Node<K,V> next = node.next;
@@ -125,4 +129,33 @@ public class MyLRU<K, V> implements Serializable {
         return this.size == 0;
     }
 
+    public static void main(String[] args) {
+        MyLRU<String, Integer> myLRU = new MyLRU<String, Integer>(3);
+        myLRU.add("key1", 7);
+        print(myLRU);
+        myLRU.add("key2", 0);
+        print(myLRU);
+        myLRU.add("key3", 1);
+        print(myLRU);
+        myLRU.add("key4", 2);
+        print(myLRU);
+        myLRU.get("key2");
+        print(myLRU);
+        myLRU.add("key5", 3);
+        print(myLRU);
+        myLRU.get("key2");
+        print(myLRU);
+        myLRU.add("key6", 4);
+        print(myLRU);
+
+    }
+
+    private static void print(MyLRU<String, Integer> myLRU) {
+        Node<String,Integer> node = myLRU.head;
+        while (node != null) {
+            System.out.println(node.v);
+            node = node.next;
+        }
+        System.out.println("------------------------------------");
+    }
 }
