@@ -1,0 +1,51 @@
+<!DOCTYPE html >
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta HTTP-EQUIV="content-type" content="text/html; charset=utf-8">
+    <title>websocket客户端</title>
+    <script type="text/javascript">
+        let socket;
+        if (window.WebSocket) {
+            socket = new WebSocket("ws://localhost:8080/mqh")
+            console.log(socket)
+            socket.onmessage = function (event) {
+                document.getElementById("responseText").value = event.data
+            }
+            socket.onopen = function () {
+                document.getElementById("responseText").value = "已连接"
+            }
+            socket.onclose = function () {
+                document.getElementById("responseText").value = "已关闭"
+            }
+        } else {
+            alert("websocket not find!")
+        }
+
+        function send(message) {
+            if (!window.WebSocket) {
+                return
+            }
+            if (socket.readyState == WebSocket.OPEN) {
+                socket.send(message)
+            } else {
+                alert("websocket not connection!")
+            }
+        }
+    </script>
+</head>
+<body>
+
+<form>
+    <hr color="black">
+    <h3>客户端</h3>
+    <label>消息</label>
+    <input type="text" name="message" value="">
+    <br>
+    <input type="button" value="点击发送" onclick="send(this.form.message.value)">
+
+    <hr color="black">
+    <h3>服务端</h3>
+    <textarea id="responseText" style="width: 900px; height: 300px"></textarea>
+</form>
+</body>
+</html>

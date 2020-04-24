@@ -1,5 +1,5 @@
 target/
-springboot.log
+springboot.log*
 !.mvn/wrapper/maven-wrapper.jar
 
 ### STS ###
