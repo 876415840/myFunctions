@@ -57,14 +57,17 @@ public class MyWebSocketHandler extends SimpleChannelInboundHandler<TextWebSocke
         JSONObject obj = JSON.parseObject(textWebSocketFrame.text());
         String channelId = obj.getString("channelId");
         String message = obj.getString("message");
-        LOGGER.info("客户端{}发送给客户端{}消息:{}", channelHandlerContext.channel().id(), channelId, message);
+        LOGGER.info("客户端{}发送给客户端{}消息:{}", channelHandlerContext.channel().id().asLongText(), channelId, message);
         Iterator<Channel> channels = channelGroup.iterator();
         while (channels.hasNext()) {
             Channel channel = channels.next();
             if (channel.id().asLongText().equals(channelId)) {
                 sendMessage(channel, message);
+                sendMessage(channelHandlerContext.channel(), "发送成功！");
+                return;
             }
         }
+        sendMessage(channelHandlerContext.channel(), "对方不在线，发送失败！");
 
 //        sendAllMessage(message);
     }
