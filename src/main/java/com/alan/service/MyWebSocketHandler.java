@@ -1,5 +1,8 @@
 package com.alan.service;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.channel.group.ChannelGroup;
@@ -9,7 +12,7 @@ import io.netty.util.concurrent.GlobalEventExecutor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Date;
+import java.util.Iterator;
 
 /**
  * @Description: websocket处理
@@ -31,7 +34,7 @@ public class MyWebSocketHandler extends SimpleChannelInboundHandler<TextWebSocke
      */
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
-        LOGGER.info("客户端与服务端建立连接，通道开启！");
+        LOGGER.info("客户端{}与服务端建立连接，通道开启！", ctx.channel().id().asLongText());
         // 添加到channelGroup通道组
         channelGroup.add(ctx.channel());
     }
@@ -41,7 +44,7 @@ public class MyWebSocketHandler extends SimpleChannelInboundHandler<TextWebSocke
      */
     @Override
     public void channelInactive(ChannelHandlerContext ctx) throws Exception {
-        LOGGER.info("客户端与服务端断开连接，通道关闭！");
+        LOGGER.info("客户端{}与服务端断开连接，通道关闭！", ctx.channel().id().asLongText());
         channelGroup.remove(ctx.channel());
     }
 
@@ -50,27 +53,34 @@ public class MyWebSocketHandler extends SimpleChannelInboundHandler<TextWebSocke
      */
     @Override
     protected void channelRead0(ChannelHandlerContext channelHandlerContext, TextWebSocketFrame textWebSocketFrame) throws Exception {
-        String message = textWebSocketFrame.text();
-        LOGGER.info("服务端收到数据：{}  local->{}  remote->{}", message, channelHandlerContext.channel().localAddress().toString(), channelHandlerContext.channel().remoteAddress().toString());
-        if (System.currentTimeMillis() % 2 == 0) {
-            sendMessage(channelHandlerContext, message);
-        } else {
-            sendAllMessage(message);
+        // {"channelId":"1c36bbfffeec6dcf-000002b0-00000001-fa1f40485870d605-9b0d8b7f","message":"tset"}
+        JSONObject obj = JSON.parseObject(textWebSocketFrame.text());
+        String channelId = obj.getString("channelId");
+        String message = obj.getString("message");
+        LOGGER.info("客户端{}发送给客户端{}消息:{}", channelHandlerContext.channel().id(), channelId, message);
+        Iterator<Channel> channels = channelGroup.iterator();
+        while (channels.hasNext()) {
+            Channel channel = channels.next();
+            if (channel.id().asLongText().equals(channelId)) {
+                sendMessage(channel, message);
+            }
         }
+
+//        sendAllMessage(message);
     }
 
     /**
      * 给指定的客户端发消息
-     * @param channelHandlerContext
+     * @param channel
      * @param message
      * @return void
      * @author MengQingHao
      * @date 2020/4/24 5:28 下午
      * @version 1.3.0
      */
-    private void sendMessage(ChannelHandlerContext channelHandlerContext, String message) {
+    private void sendMessage(Channel channel, String message) {
         String msg = "收到消息：" + message + "，单个响应！";
-        channelHandlerContext.channel().writeAndFlush(new TextWebSocketFrame(msg));
+        channel.writeAndFlush(new TextWebSocketFrame(msg));
     }
 
     /**
