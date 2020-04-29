@@ -106,7 +106,7 @@
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
-            <version>1.2.7</version>
+            <version>1.2.31</version>
         </dependency>
         <dependency>
             <groupId>org.mockito</groupId>
@@ -154,7 +154,7 @@
         <dependency>
             <groupId>io.netty</groupId>
             <artifactId>netty-all</artifactId>
-            <version>4.1.36.Final</version>
+            <version>4.1.42.Final</version>
         </dependency>
     </dependencies>
 
